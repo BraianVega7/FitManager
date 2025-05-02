@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using FitManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitManager.Controllers
@@ -17,7 +18,7 @@ namespace FitManager.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
