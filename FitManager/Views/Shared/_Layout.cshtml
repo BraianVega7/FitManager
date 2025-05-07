@@ -25,6 +25,9 @@
                         </li>
                         @if(User.Identity.IsAuthenticated){
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Actividad" asp-action="Index">Actividades</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
                             </li>
                         }

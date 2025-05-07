@@ -1,0 +1,53 @@
+﻿@model FitManager.ViewModels.CrearActividadViewModel
+
+@{
+    ViewData["Title"] = "Editar Actividad";
+}
+
+<h1>Editar actividad</h1>
+
+<hr />
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Actividad.Id" />
+
+    <div class="form-group">
+        <label asp-for="Actividad.Nombre" class="control-label"></label>
+        <input asp-for="Actividad.Nombre" class="form-control" />
+        <span asp-validation-for="Actividad.Nombre" class="text-danger"></span>
+    </div>
+
+    <h4>Precios por cantidad de días semanales</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Días por semana</th>
+                <th>Precio ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Precios.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Precios[i].DiasPorSemana
+                        <input type="hidden" asp-for="Precios[@i].DiasPorSemana" />
+                    </td>
+                    <td>
+                        <input asp-for="Precios[@i].Precio" class="form-control" type="number" step="0.01" inputmode="decimal" />
+                        <span asp-validation-for="Precios[@i].Precio" class="text-danger"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Guardar cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

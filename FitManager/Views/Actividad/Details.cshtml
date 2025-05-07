@@ -1,0 +1,36 @@
+﻿@model FitManager.Models.Actividad
+
+@{
+    ViewData["Title"] = "Detalle de Actividad";
+}
+
+<h1>@Model.Nombre</h1>
+
+<h4>Precios por días semanales</h4>
+
+@if (Model.PreciosPorDia != null && Model.PreciosPorDia.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Días por semana</th>
+                <th>Precio ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var precio in Model.PreciosPorDia.OrderBy(p => p.DiasPorSemana))
+            {
+                <tr>
+                    <td>@precio.DiasPorSemana</td>
+                    <td>@precio.Precio.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No hay precios definidos para esta actividad.</p>
+}
+
+<a asp-action="Index" class="btn btn-secondary">Volver al listado</a>

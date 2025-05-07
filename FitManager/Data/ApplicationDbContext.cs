@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FitManager.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitManager.Data
@@ -7,7 +8,11 @@ namespace FitManager.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {
+        {           
+
         }
+
+        public DbSet<Actividad> Actividades { get; set; }
+        public DbSet<ActividadPrecio> ActividadPrecios { get; set; }
     }
 }

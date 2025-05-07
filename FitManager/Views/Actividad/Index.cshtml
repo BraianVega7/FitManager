@@ -1,0 +1,38 @@
+﻿@model IEnumerable<FitManager.Models.Actividad>
+
+@{
+    ViewData["Title"] = "Listado de Actividades";
+}
+
+<h1>Actividades</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Nueva Actividad</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precios</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">
+                        Ver Precios
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
