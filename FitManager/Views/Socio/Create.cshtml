@@ -1,0 +1,107 @@
+﻿@model FitManager.ViewModels.CrearSocioViewModel
+
+@{
+    ViewData["Title"] = "Crear Socio";
+}
+
+<h2>Crear Socio</h2>
+
+<form asp-action="Create" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Dni" class="control-label"></label>
+                <input asp-for="Dni" class="form-control" />
+                <span asp-validation-for="Dni" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaIngreso" class="control-label"></label>
+                <input asp-for="FechaIngreso" type="date" class="form-control" />
+                <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Localidad" class="control-label"></label>
+                <input asp-for="Localidad" class="form-control" />
+                <span asp-validation-for="Localidad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Domicilio" class="control-label"></label>
+                <input asp-for="Domicilio" class="form-control" />
+                <span asp-validation-for="Domicilio" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Actividades</h4>
+
+            @if (Model.Actividades != null && Model.Actividades.Any())
+            {
+                @for (int i = 0; i < Model.Actividades.Count; i++)
+                {
+                    <div class="form-check mb-3 border rounded p-2">
+                        <input type="checkbox" class="form-check-input" asp-for="Actividades[i].Seleccionado" />
+                        <label class="form-check-label fw-bold">
+                            @Model.Actividades[i].NombreActividad
+                        </label>
+
+                        <div class="mt-1">
+                            <label class="form-label">Días por semana:</label>
+                            <select asp-for="Actividades[i].DiasPorSemana" class="form-select form-select-sm" style="width: 150px;">
+                                <option value="1">1 día</option>
+                                <option value="2">2 días</option>
+                                <option value="3">3 días</option>
+                                <option value="4">4 días</option>
+                                <option value="5">5 días</option>
+                            </select>
+                        </div>
+
+                        <input type="hidden" asp-for="Actividades[i].ActividadId" />
+                        <input type="hidden" asp-for="Actividades[i].NombreActividad" />
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No hay actividades disponibles.</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

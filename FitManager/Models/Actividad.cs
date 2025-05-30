@@ -14,6 +14,6 @@ namespace FitManager.Models
 
         [ValidateNever]
         public ICollection<ActividadPrecio> PreciosPorDia { get; set; } = new List<ActividadPrecio>();
-        // public ICollection<SocioActividad> SocioActividades { get; set; }
+        public ICollection<SocioActividad> SocioActividades { get; set; } = new List<SocioActividad>();
     }
 }
