@@ -125,13 +125,39 @@ namespace FitManager.Controllers
             {
                 return NotFound();
             }
+            var socio = await _context.Socios
+                .Include(s => s.SocioActividades)
+                .ThenInclude(sa => sa.Actividad)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            var socio = await _context.Socios.FindAsync(id);
             if (socio == null)
             {
                 return NotFound();
             }
-            return View(socio);
+
+            var todasLasActividades = await _context.Actividades.ToListAsync();
+            var actividadesVM = todasLasActividades.Select(a => new SocioActividadViewModel
+            {
+                ActividadId = a.Id,
+                NombreActividad = a.Nombre,
+                Seleccionado = socio.SocioActividades.Any(sa => sa.ActividadId == a.Id),
+                DiasPorSemana = socio.SocioActividades.FirstOrDefault(sa => sa.ActividadId == a.Id)?.DiasPorSemana ?? 1
+            }).ToList();
+
+            var model = new CrearSocioViewModel
+            {
+                Id = socio.Id,
+                Nombre = socio.Nombre,
+                Apellido = socio.Apellido,
+                Dni = socio.Dni,
+                Email = socio.Email,
+                Telefono = socio.Telefono,
+                FechaIngreso = socio.FechaIngreso,
+                Domicilio = socio.Domicilio,
+                Localidad = socio.Localidad,
+                Actividades = actividadesVM,
+            };
+            return View(model);
         }
 
         // POST: Socio/Edit/5
@@ -139,34 +165,49 @@ namespace FitManager.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Dni,Telefono,Email,FechaIngreso,Domicilio,Localidad,UsuarioId")] Socio socio)
+        public async Task<IActionResult> Edit(int id,CrearSocioViewModel model)
         {
-            if (id != socio.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var socioExistente = await _context.Socios
+                    .Include(s => s.SocioActividades)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+                if (socioExistente == null)
                 {
-                    _context.Update(socio);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                
+                model.Actividades = model.Actividades ?? new List<SocioActividadViewModel>();
+                socioExistente.SocioActividades.Clear();
+                foreach (var actividad in model.Actividades.Where(a => a.Seleccionado))
                 {
-                    if (!SocioExists(socio.Id))
+                    socioExistente.SocioActividades.Add(new SocioActividad
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        ActividadId = actividad.ActividadId,
+                        DiasPorSemana = actividad.DiasPorSemana,
+                    });
                 }
+
+                
+                socioExistente.Nombre = model.Nombre;
+                socioExistente.Apellido = model.Apellido;
+                socioExistente.Dni = model.Dni;
+                socioExistente.Telefono = model.Telefono;
+                socioExistente.Email = model.Email;
+                socioExistente.FechaIngreso = model.FechaIngreso;
+                socioExistente.Domicilio = model.Domicilio;
+                socioExistente.Localidad = model.Localidad;
+
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(socio);
+            return View(model);
         }
         // GET: Socio/Delete/5
         public async Task<IActionResult> Delete(int? id)

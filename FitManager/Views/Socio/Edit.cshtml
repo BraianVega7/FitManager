@@ -1,72 +1,147 @@
-﻿@model FitManager.Models.Socio
+﻿@model FitManager.ViewModels.CrearSocioViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Socio";
 }
 
-<h1>Edit</h1>
+<style>
+    body {
+        background-color: #f0f8ff;
+    }
 
-<h4>Socio</h4>
+    .card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+    }
+
+    h1, h4 {
+        color: #004085;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    .form-control, .form-select {
+        margin-bottom: 15px;
+    }
+
+    .actividad-card {
+        background-color: #e9f7ef;
+        border: 1px solid #c3e6cb;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .form-actions {
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+</style>
+
+<h1>Editar Socio</h1>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+    <div class="col-md-6">
+        <div class="card">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
 
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Apellido"></label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Dni" class="control-label"></label>
-                <input asp-for="Dni" class="form-control" />
-                <span asp-validation-for="Dni" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Dni"></label>
+                    <input asp-for="Dni" class="form-control" />
+                    <span asp-validation-for="Dni" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Telefono"></label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="FechaIngreso" class="control-label"></label>
-                <input asp-for="FechaIngreso" class="form-control" />
-                <span asp-validation-for="FechaIngreso" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="FechaIngreso"></label>
+                    <input asp-for="FechaIngreso" class="form-control" type="date" />
+                    <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+                </div>
 
-            <div>
-                <label asp-for="Localidad" class="control-label"></label>
-                <input asp-for="Localidad" class="form-control" />
-                <span asp-validation-for="Localidad" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Localidad"></label>
+                    <input asp-for="Localidad" class="form-control" />
+                    <span asp-validation-for="Localidad" class="text-danger"></span>
+                </div>
 
-            <div>
-                <label asp-for="Domicilio" class="control-label"></label>
-                <input asp-for="Domicilio" class="form-control" />
-                <span asp-validation-for="Domicilio" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Domicilio"></label>
+                    <input asp-for="Domicilio" class="form-control" />
+                    <span asp-validation-for="Domicilio" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h4 class="mb-3">Actividades</h4>
+        @for (int i = 0; i < Model.Actividades.Count; i++)
+        {
+            <div class="actividad-card">
+                <input type="hidden" asp-for="Actividades[i].ActividadId" />
+                <input type="hidden" asp-for="Actividades[i].NombreActividad" />
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="Actividades[i].Seleccionado" />
+                    <label class="form-check-label fw-bold">@Model.Actividades[i].NombreActividad</label>
+                </div>
+
+                <div class="mt-2">
+                    <label>Días por semana:</label>
+                    <select asp-for="Actividades[i].DiasPorSemana" class="form-select form-select-sm" style="width: 150px;">
+                        <option value="1">1 día</option>
+                        <option value="2">2 días</option>
+                        <option value="3">3 días</option>
+                        <option value="4">4 días</option>
+                        <option value="5">5 días</option>
+                    </select>
+                </div>
             </div>
-        </form>
+        }
     </div>
 </div>
 
