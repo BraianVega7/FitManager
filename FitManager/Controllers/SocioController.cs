@@ -25,7 +25,9 @@ namespace FitManager.Controllers
         // GET: Socio
         public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var socios = await _context.Socios
+                .Where(s => s.UsuarioId == userId)
                 .Include(s => s.SocioActividades)
                 .ThenInclude(sa => sa.Actividad)
                 .ToListAsync();
@@ -40,8 +42,12 @@ namespace FitManager.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var socio = await _context.Socios
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(s => s.SocioActividades)
+                .ThenInclude(sa => sa.Actividad)
+                .FirstOrDefaultAsync(m => m.Id == id && m.UsuarioId == userId);
             if (socio == null)
             {
                 return NotFound();
@@ -53,7 +59,10 @@ namespace FitManager.Controllers
         // GET: Socio/Create
         public IActionResult Create()
         {
-            var actividades= _context.Actividades.ToList();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var actividades = _context.Actividades
+                .Where(a => a.UsuarioId == userId)
+                .ToList();
 
             var model= new CrearSocioViewModel
             {
@@ -125,10 +134,12 @@ namespace FitManager.Controllers
             {
                 return NotFound();
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var socio = await _context.Socios
                 .Include(s => s.SocioActividades)
                 .ThenInclude(sa => sa.Actividad)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.UsuarioId == userId);
 
             if (socio == null)
             {
@@ -174,9 +185,11 @@ namespace FitManager.Controllers
 
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 var socioExistente = await _context.Socios
                     .Include(s => s.SocioActividades)
-                    .FirstOrDefaultAsync(s => s.Id == id);
+                    .FirstOrDefaultAsync(s => s.Id == id && s.UsuarioId == userId);
                 if (socioExistente == null)
                 {
                     return NotFound();
@@ -217,8 +230,9 @@ namespace FitManager.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var socio = await _context.Socios
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.UsuarioId == userId);
             if (socio == null)
             {
                 return NotFound();
@@ -232,7 +246,8 @@ namespace FitManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var socio = await _context.Socios.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var socio = await _context.Socios.FirstOrDefaultAsync(s => s.Id == id && s.UsuarioId == userId);
             if (socio != null)
             {
                 _context.Socios.Remove(socio);

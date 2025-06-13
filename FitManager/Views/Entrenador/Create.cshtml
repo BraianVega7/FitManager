@@ -1,0 +1,72 @@
+﻿@model FitManager.ViewModels.CrearEntrenadorViewModel
+
+@{
+    ViewData["Title"] = "Crear Entrenador";
+}
+
+<h1>Crear Entrenador</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Entrenador.Nombre" class="control-label"></label>
+                <input asp-for="Entrenador.Nombre" class="form-control" />
+                <span asp-validation-for="Entrenador.Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Entrenador.Apellido" class="control-label"></label>
+                <input asp-for="Entrenador.Apellido" class="form-control" />
+                <span asp-validation-for="Entrenador.Apellido" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Entrenador.Email" class="control-label"></label>
+                <input asp-for="Entrenador.Email" class="form-control" />
+                <span asp-validation-for="Entrenador.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Entrenador.Telefono" class="control-label"></label>
+                <input asp-for="Entrenador.Telefono" class="form-control" />
+                <span asp-validation-for="Entrenador.Telefono" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Entrenador.SueldoMensual" class="control-label"></label>
+                <input asp-for="Entrenador.SueldoMensual" class="form-control" type="number" step="0.01" lang="es" />
+                <span asp-validation-for="Entrenador.SueldoMensual" class="text-danger"></span>
+            </div>
+
+            <h4>Actividades que dicta</h4>
+            <div class="form-group">
+                @foreach (var actividad in Model.ActividadDisponible)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               value="@actividad.Id"
+                               name="ActividadIdSeleccionadas"
+                        @(Model.ActividadIdSeleccionadas.Contains(actividad.Id) ? "checked" : "") />
+                        <label class="form-check-label">@actividad.Nombre</label>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

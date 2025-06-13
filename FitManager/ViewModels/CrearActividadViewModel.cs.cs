@@ -6,6 +6,9 @@ namespace FitManager.ViewModels
     {
         public Actividad Actividad { get; set; } = new Actividad();
         public List<PrecioPorDiaViewModel> Precios { get; set; } = new();
+
+        public List<Entrenador> EntrenadoresDisponibles { get; set; } = new();
+        public List<int> EntrenadorIdsSeleccionados { get; set; } = new();
     }
 
     public class PrecioPorDiaViewModel

@@ -33,4 +33,19 @@ else
     <p class="text-muted">No hay precios definidos para esta actividad.</p>
 }
 
+<h4>Entrenadores asignados</h4>
+@if (Model.EntrenadorActividades != null && Model.EntrenadorActividades.Any())
+{
+    <ul>
+        @foreach (var ea in Model.EntrenadorActividades)
+        {
+            <li>@($"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}")</li>
+        }
+    </ul>
+}
+else
+{
+    <p class="text-muted">No hay entrenadores asignados a esta actividad.</p>
+}
+
 <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>

@@ -24,7 +24,14 @@ namespace FitManager.Controllers
         // GET: Actividad
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actividades.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var actividades = await _context.Actividades
+                .Where(a => a.UsuarioId == userId)
+                .Include(a => a.EntrenadorActividades)
+                .ThenInclude(ea => ea.Entrenador)
+                .ToListAsync();
+
+            return View(actividades);
         }
 
         // GET: Actividad/Details/5
@@ -35,9 +42,13 @@ namespace FitManager.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var actividad = await _context.Actividades
                 .Include(a => a.PreciosPorDia)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(a => a.EntrenadorActividades)
+                    .ThenInclude(ea => ea.Entrenador)
+                .FirstOrDefaultAsync(m => m.Id == id && m.UsuarioId == userId);
 
             if (actividad == null)
             {
@@ -50,6 +61,12 @@ namespace FitManager.Controllers
         // GET: Actividad/Create
         public IActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var entrenadores = _context.Entrenadores
+                .Where(e => e.UsuarioId == userId)
+                .ToList();
+
             var viewModel = new CrearActividadViewModel
             {
                 Actividad = new Actividad(),
@@ -57,7 +74,9 @@ namespace FitManager.Controllers
                 {
                     DiasPorSemana = d,
                     Precio = 0
-                }).ToList()
+                }).ToList(),
+                EntrenadoresDisponibles = entrenadores,
+                EntrenadorIdsSeleccionados = new List<int>()
             };
 
             return View(viewModel);
@@ -72,28 +91,41 @@ namespace FitManager.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                model.EntrenadoresDisponibles = _context.Entrenadores
+                    .Where(e => e.UsuarioId == userId)
+                    .ToList();
+
                 return View(model);
             }
 
             model.Actividad.UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             _context.Actividades.Add(model.Actividad);
             await _context.SaveChangesAsync();
 
             foreach (var precio in model.Precios)
             {
-                var actividadPrecio = new ActividadPrecio
+                _context.ActividadPrecios.Add(new ActividadPrecio
                 {
                     ActividadId = model.Actividad.Id,
                     DiasPorSemana = precio.DiasPorSemana,
                     Precio = precio.Precio
-                };
+                });
+            }
 
-                _context.ActividadPrecios.Add(actividadPrecio);
+            if (model.EntrenadorIdsSeleccionados != null && model.EntrenadorIdsSeleccionados.Any())
+            {
+                foreach (var entrenadorId in model.EntrenadorIdsSeleccionados)
+                {
+                    _context.EntrenadorActividades.Add(new EntrenadorActividad
+                    {
+                        ActividadId = model.Actividad.Id,
+                        EntrenadorId = entrenadorId
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -103,12 +135,19 @@ namespace FitManager.Controllers
             if (id == null)
                 return NotFound();
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var actividad = await _context.Actividades
                 .Include(a => a.PreciosPorDia)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Include(a => a.EntrenadorActividades)
+                .FirstOrDefaultAsync(a => a.Id == id && a.UsuarioId == userId);
 
             if (actividad == null)
                 return NotFound();
+
+            var entrenadores = await _context.Entrenadores
+                .Where(e => e.UsuarioId == userId)
+                .ToListAsync();
 
             var viewModel = new CrearActividadViewModel
             {
@@ -119,7 +158,9 @@ namespace FitManager.Controllers
                     {
                         DiasPorSemana = p.DiasPorSemana,
                         Precio = p.Precio
-                    }).ToList()
+                    }).ToList(),
+                EntrenadoresDisponibles = entrenadores,
+                EntrenadorIdsSeleccionados = actividad.EntrenadorActividades.Select(ea => ea.EntrenadorId).ToList()
             };
 
             return View(viewModel);
@@ -136,19 +177,26 @@ namespace FitManager.Controllers
                 return NotFound();
 
             if (!ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                model.EntrenadoresDisponibles = await _context.Entrenadores
+                    .Where(e => e.UsuarioId == userId)
+                    .ToListAsync();
                 return View(model);
+            }
 
-            // Actualizar nombre
+            var userIdCheck = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var actividadEnDb = await _context.Actividades
                 .Include(a => a.PreciosPorDia)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Include(a => a.EntrenadorActividades)
+                .FirstOrDefaultAsync(a => a.Id == id && a.UsuarioId == userIdCheck);
 
             if (actividadEnDb == null)
                 return NotFound();
 
             actividadEnDb.Nombre = model.Actividad.Nombre;
 
-            // Actualizar precios
             foreach (var precioVm in model.Precios)
             {
                 var precioEnDb = actividadEnDb.PreciosPorDia
@@ -160,8 +208,20 @@ namespace FitManager.Controllers
                 }
             }
 
-            await _context.SaveChangesAsync();
+            actividadEnDb.EntrenadorActividades.Clear();
+            if (model.EntrenadorIdsSeleccionados != null && model.EntrenadorIdsSeleccionados.Any())
+            {
+                foreach (var entrenadorId in model.EntrenadorIdsSeleccionados)
+                {
+                    actividadEnDb.EntrenadorActividades.Add(new EntrenadorActividad
+                    {
+                        EntrenadorId = entrenadorId,
+                        ActividadId = actividadEnDb.Id
+                    });
+                }
+            }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         // GET: Actividad/Delete/5
@@ -172,8 +232,11 @@ namespace FitManager.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var actividad = await _context.Actividades
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.UsuarioId == userId);
+
             if (actividad == null)
             {
                 return NotFound();
@@ -187,13 +250,21 @@ namespace FitManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actividad = await _context.Actividades.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var actividad = await _context.Actividades
+                .Include(a => a.PreciosPorDia)
+                .Include(a => a.EntrenadorActividades)
+                .FirstOrDefaultAsync(a => a.Id == id && a.UsuarioId == userId);
+
             if (actividad != null)
             {
+                _context.ActividadPrecios.RemoveRange(actividad.PreciosPorDia);
+                _context.EntrenadorActividades.RemoveRange(actividad.EntrenadorActividades);
                 _context.Actividades.Remove(actividad);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

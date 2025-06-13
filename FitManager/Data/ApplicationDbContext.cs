@@ -15,5 +15,7 @@ namespace FitManager.Data
         public DbSet<Actividad> Actividades { get; set; }
         public DbSet<ActividadPrecio> ActividadPrecios { get; set; }
         public DbSet<Socio> Socios { get; set; }
+        public DbSet<Entrenador> Entrenadores { get; set; }
+        public DbSet<EntrenadorActividad> EntrenadorActividades { get; set; }
     }
 }

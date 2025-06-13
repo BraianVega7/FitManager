@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Precios</th>
+            <th>Entrenadores</th>
             <th></th>
         </tr>
     </thead>
@@ -24,12 +24,22 @@
             <tr>
                 <td>@item.Nombre</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">
-                        Ver Precios
-                    </a>
+                    @if (item.EntrenadorActividades != null && item.EntrenadorActividades.Any())
+                    {
+                        @string.Join(", ", item.EntrenadorActividades
+                                 .Where(ea => ea.Entrenador != null)
+                                 .Select(ea => $"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}"))
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin entrenadores asignados</span>
+                    }
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                <td class="text-nowrap">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
+                        <i class="fas fa-eye"></i> Detalles
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">Editar</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
                 </td>
             </tr>

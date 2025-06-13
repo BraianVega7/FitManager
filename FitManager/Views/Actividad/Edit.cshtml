@@ -40,6 +40,28 @@
         </tbody>
     </table>
 
+    <h4>Entrenadores asignados</h4>
+    <div class="form-group">
+        @if (Model.EntrenadoresDisponibles != null && Model.EntrenadoresDisponibles.Any())
+        {
+            @foreach (var entrenador in Model.EntrenadoresDisponibles)
+            {
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="EntrenadorIdsSeleccionados"
+                           value="@entrenador.Id"
+                    @(Model.EntrenadorIdsSeleccionados.Contains(entrenador.Id) ? "checked" : "") />
+                    <label class="form-check-label">@entrenador.Nombre @entrenador.Apellido</label>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">No hay entrenadores disponibles para asignar.</p>
+        }
+    </div>
+
     <button type="submit" class="btn btn-success">Guardar cambios</button>
     <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 </form>
