@@ -1,0 +1,63 @@
+﻿@model List<FitManager.ViewModels.CrearPagoViewModel>
+
+@{
+    ViewData["Title"] = "Pagos de Socios";
+}
+
+<h1>Pagos de Socios Activos</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Actividades</th>
+            <th>Total a Pagar</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var socio in Model)
+        {
+            <tr>
+                <td>@socio.Nombre</td>
+                <td>@socio.Apellido</td>
+                <td>@socio.Dni</td>
+                <td>
+                    <ul>
+                        @foreach (var act in socio.Actividades)
+                        {
+                            <li>@act.nombreActividad - @act.diasPorSemana días - $@act.precio.ToString("N2")</li>
+                        }
+                    </ul>
+                </td>
+                <td><strong>$@socio.Total.ToString("N2")</strong></td>
+                <td>
+                    @if (socio.YaPagado)
+                    {
+                        <span class="text-success">Pagado</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Pendiente</span>
+                    }
+                </td>
+                <td>
+                    @if (!socio.YaPagado)
+                    {
+                        <form asp-action="RegistrarPago" method="post">
+                            <input type="hidden" name="socioId" value="@socio.SocioId" />
+                            <button type="submit" class="btn btn-sm btn-primary">Registrar Pago</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -31,6 +31,7 @@ namespace FitManager.ViewModels
 
         [Required]
         public string Localidad { get; set; }
+        public bool Activo { get; set; } = true;
 
         public string UsuarioId { get; set; } = string.Empty;
 

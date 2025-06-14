@@ -109,6 +109,7 @@ namespace FitManager.Controllers
                 FechaIngreso = model.FechaIngreso,
                 Domicilio = model.Domicilio,
                 Localidad = model.Localidad,
+                Activo = model.Activo,
                 UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
 
@@ -215,6 +216,7 @@ namespace FitManager.Controllers
                 socioExistente.FechaIngreso = model.FechaIngreso;
                 socioExistente.Domicilio = model.Domicilio;
                 socioExistente.Localidad = model.Localidad;
+                socioExistente.Activo = model.Activo;
 
                 await _context.SaveChangesAsync();
 

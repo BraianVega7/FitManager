@@ -31,7 +31,8 @@ namespace FitManager.Models
         [Required(ErrorMessage = "El domicilio del socio es obligatorio")]
         [Display(Name = "Domicilio")]
         public string Domicilio {  get; set; }
-
+        [Display(Name = "Activo")]
+        public bool Activo { get; set; } = true;
         public string UsuarioId { get; set; } = string.Empty;
         public ICollection<SocioActividad> SocioActividades { get; set; } = new List<SocioActividad>();
     }
