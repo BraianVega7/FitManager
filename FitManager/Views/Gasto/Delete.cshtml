@@ -1,0 +1,26 @@
+﻿@model FitManager.Models.Gasto
+
+@{
+    ViewData["Title"] = "Eliminar Gasto";
+}
+
+<h2>¿Estás seguro de que deseas eliminar este gasto?</h2>
+
+<div class="mb-4">
+    <dl class="row">
+        <dt class="col-sm-2">Descripción:</dt>
+        <dd class="col-sm-10">@Model.Descripcion</dd>
+
+        <dt class="col-sm-2">Monto:</dt>
+        <dd class="col-sm-10">$@Model.Monto.ToString("N2")</dd>
+
+        <dt class="col-sm-2">Fecha:</dt>
+        <dd class="col-sm-10">@Model.Fecha.ToShortDateString()</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,76 @@
+﻿@model List<FitManager.Models.Gasto>
+
+@{
+    ViewData["Title"] = "Gastos del Mes";
+}
+
+<h1 class="mb-4">Gastos del Mes</h1>
+
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#agregarGastoModal">
+    + Registrar Gasto
+</button>
+
+<div class="modal fade" id="agregarGastoModal" tabindex="-1" aria-labelledby="agregarGastoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Index" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarGastoLabel">Nuevo Gasto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="@(new FitManager.Models.Gasto().Descripcion)" class="form-label"></label>
+                        <input asp-for="@(new FitManager.Models.Gasto().Descripcion)" name="Descripcion" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="@(new FitManager.Models.Gasto().Monto)" class="form-label"></label>
+                        <input asp-for="@(new FitManager.Models.Gasto().Monto)" name="Monto" type="number" step="0.01" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Monto ($)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gasto in Model)
+            {
+                <tr>
+                    <td>@gasto.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@gasto.Descripcion</td>
+                    <td>@gasto.Monto.ToString("N2")</td>
+                    <td class="text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@gasto.Id" class="btn btn-sm btn-warning me-1">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@gasto.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-end fw-bold">Total del mes:</td>
+                <td class="fw-bold">@Model.Sum(g => g.Monto).ToString("N2")</td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No se registraron gastos este mes.</div>
+}
