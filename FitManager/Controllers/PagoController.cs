@@ -100,6 +100,24 @@ namespace FitManager.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public async Task<IActionResult> CancelarPago(int socioId)
+        {
+            var pago = await _context.Pago
+                .FirstOrDefaultAsync(p => p.SocioId == socioId && 
+                p.FechaPago.Month == DateTime.Now.Month && 
+                p.FechaPago.Year == DateTime.Now.Year);
+            if (pago == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Pago.Remove(pago);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }
 

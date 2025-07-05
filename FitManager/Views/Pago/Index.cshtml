@@ -54,7 +54,10 @@
                     }
                     else
                     {
-                        <span class="text-muted">-</span>
+                        <form asp-action="CancelarPago" method="post">
+                            <input type="hidden" name="socioId" value="@socio.SocioId" />
+                            <button type="submit" class="btn btn-sm btn-danger">Cancelar Pago</button>
+                        </form>
                     }
                 </td>
             </tr>
