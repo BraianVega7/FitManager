@@ -1,27 +1,29 @@
 ﻿@model FitManager.Models.Actividad
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Actividad";
 }
 
-<h1>Delete</h1>
+<div class="card-fit">
+    <div class="card-fit-header mb-3">
+        <h2>Eliminar Actividad</h2>
+    </div>
 
-<h3>¿Estás seguro de que quieres eliminar esto?</h3>
-<div>
-    <h4>Actividad</h4>
+    <h5 class="text-danger">¿Estás seguro de que querés eliminar esta actividad?</h5>
     <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3 fw-semibold">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Nombre)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <button type="submit" class="btn btn-danger me-2">Eliminar</button>
         <a asp-action="Index" class="btn btn-secondary">Volver</a>
     </form>
 </div>

@@ -4,48 +4,59 @@
     ViewData["Title"] = "Detalle de Actividad";
 }
 
-<h1>@Model.Nombre</h1>
+<div class="card-fit">
+    <div class="card-fit-header">
+        <h2 class="mb-3">@Model.Nombre</h2>
+    </div>
 
-<h4>Precios por días semanales</h4>
+    <div class="mb-4">
+        <h5 class="fw-bold">Precios por días semanales</h5>
 
-@if (Model.PreciosPorDia != null && Model.PreciosPorDia.Any())
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Días por semana</th>
-                <th>Precio ($)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var precio in Model.PreciosPorDia.OrderBy(p => p.DiasPorSemana))
-            {
-                <tr>
-                    <td>@precio.DiasPorSemana</td>
-                    <td>@precio.Precio.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p class="text-muted">No hay precios definidos para esta actividad.</p>
-}
-
-<h4>Entrenadores asignados</h4>
-@if (Model.EntrenadorActividades != null && Model.EntrenadorActividades.Any())
-{
-    <ul>
-        @foreach (var ea in Model.EntrenadorActividades)
+        @if (Model.PreciosPorDia != null && Model.PreciosPorDia.Any())
         {
-            <li>@($"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}")</li>
+            <table class="table table-bordered table-hover mt-2">
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>Días por semana</th>
+                        <th>Precio ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var precio in Model.PreciosPorDia.OrderBy(p => p.DiasPorSemana))
+                    {
+                        <tr>
+                            <td class="text-center">@precio.DiasPorSemana</td>
+                            <td class="text-center">@precio.Precio.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
-    </ul>
-}
-else
-{
-    <p class="text-muted">No hay entrenadores asignados a esta actividad.</p>
-}
+        else
+        {
+            <p class="text-muted">No hay precios definidos para esta actividad.</p>
+        }
+    </div>
 
-<a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+    <div class="mb-4">
+        <h5 class="fw-bold">Entrenadores asignados</h5>
+        @if (Model.EntrenadorActividades != null && Model.EntrenadorActividades.Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var ea in Model.EntrenadorActividades)
+                {
+                    <li class="list-group-item">@($"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}")</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No hay entrenadores asignados a esta actividad.</p>
+        }
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+    </div>
+</div>

@@ -4,13 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<p>
+<p class="mt-4 mb-3">
     <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
         <i class="fas fa-user-plus"></i> Crear nuevo socio
     </a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-hover table-bordered shadow-sm">
+    <thead class="table-secondary text-dark text-center">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
@@ -48,12 +48,15 @@
             <th>
                 Total dias
             </th>
+            <th>
+                Acciones
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="@(item.Activo ? "fila-activo" : "fila-inactivo")">
                 <td>
                     @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
@@ -105,15 +108,9 @@
                     @item.SocioActividades.Sum(x => x.DiasPorSemana)
                 </td>
                 <td class="text-nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-2">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-2">
-                        <i class="fas fa-eye"></i> Detalle
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
-                        <i class="fas fa-trash"></i> Eliminar
-                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalle</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
                 </td>
             </tr>
         }

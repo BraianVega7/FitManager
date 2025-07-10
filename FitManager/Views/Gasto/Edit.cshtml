@@ -4,31 +4,69 @@
     ViewData["Title"] = "Editar Gasto";
 }
 
-<h2>Editar Gasto</h2>
+<style>
+    body {
+    background-color: #f0f8ff;
+    }
 
-<form asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
+    .card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 30px;
+    }
 
-    <div class="form-group">
-        <label asp-for="Descripcion" class="control-label"></label>
-        <input asp-for="Descripcion" class="form-control" />
-        <span asp-validation-for="Descripcion" class="text-danger"></span>
-    </div>
+    h2 {
+    color: #004085;
+    }
 
-    <div class="form-group">
-        <label asp-for="Monto" class="control-label"></label>
-        <input asp-for="Monto" type="number" step="0.01" class="form-control" />
-        <span asp-validation-for="Monto" class="text-danger"></span>
-    </div>
+    label {
+    font-weight: 600;
+    }
 
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </div>
-</form>
+    .form-control {
+    margin-bottom: 15px;
+    }
+
+    .btn-primary {
+    background-color: #007bff;
+    border: none;
+    }
+
+    .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    }
+</style>
+
+<div class="card">
+    <h2 class="mb-4">Editar Gasto</h2>
+
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="Descripcion" class="control-label"></label>
+            <input asp-for="Descripcion" class="form-control" />
+            <span asp-validation-for="Descripcion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Monto" class="control-label"></label>
+            <input asp-for="Monto" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="Monto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary me-2">Guardar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

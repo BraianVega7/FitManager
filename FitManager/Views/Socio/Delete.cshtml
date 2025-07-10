@@ -4,66 +4,76 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Borrar socio</h1>
+<style>
+    .card-delete {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-<h3>¿Estás seguro de que quieres eliminar esto?</h3>
-<div>
-    <h4>Socio</h4>
+    h1, h3 {
+        color: #721c24;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+    .form-actions {
+        margin-top: 20px;
+    }
+
+    dt {
+        font-weight: 600;
+    }
+
+    dd {
+        margin-bottom: 10px;
+    }
+</style>
+
+<h1>Borrar socio</h1>
+<h3>¿Estás seguro de que quieres eliminar este socio?</h3>
+
+<div class="card-delete mt-4">
+    <h4 class="mb-3">Información del socio</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Dni)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Dni)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefono)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefono)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaIngreso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaIngreso)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Localidad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Localidad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Domicilio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Domicilio)
-        </dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombre)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Apellido)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Apellido)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Dni)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Dni)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Telefono)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Telefono)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaIngreso)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaIngreso)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Localidad)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Localidad)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Domicilio)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Domicilio)</dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Delete" method="post" class="form-actions">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver</a>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Volver</a>
     </form>
 </div>

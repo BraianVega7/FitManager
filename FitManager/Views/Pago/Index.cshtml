@@ -4,63 +4,105 @@
     ViewData["Title"] = "Pagos de Socios";
 }
 
-<h1>Pagos de Socios Activos</h1>
+<style>
+    body {
+        background-color: #f0f8ff;
+    }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>DNI</th>
-            <th>Actividades</th>
-            <th>Total a Pagar</th>
-            <th>Estado</th>
-            <th>Acción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var socio in Model)
-        {
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    h1 {
+        color: #004085;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+    }
+
+    .btn-sm {
+        padding: 4px 10px;
+    }
+
+    ul {
+        padding-left: 1rem;
+        text-align: left;
+    }
+
+    .text-success {
+        font-weight: bold;
+    }
+
+    .text-danger {
+        font-weight: bold;
+    }
+</style>
+
+<div class="card">
+    <h1>Pagos de Socios Activos</h1>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
             <tr>
-                <td>@socio.Nombre</td>
-                <td>@socio.Apellido</td>
-                <td>@socio.Dni</td>
-                <td>
-                    <ul>
-                        @foreach (var act in socio.Actividades)
-                        {
-                            <li>@act.nombreActividad - @act.diasPorSemana días - $@act.precio.ToString("N2")</li>
-                        }
-                    </ul>
-                </td>
-                <td><strong>$@socio.Total.ToString("N2")</strong></td>
-                <td>
-                    @if (socio.YaPagado)
-                    {
-                        <span class="text-success">Pagado</span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">Pendiente</span>
-                    }
-                </td>
-                <td>
-                    @if (!socio.YaPagado)
-                    {
-                        <form asp-action="RegistrarPago" method="post">
-                            <input type="hidden" name="socioId" value="@socio.SocioId" />
-                            <button type="submit" class="btn btn-sm btn-primary">Registrar Pago</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <form asp-action="CancelarPago" method="post">
-                            <input type="hidden" name="socioId" value="@socio.SocioId" />
-                            <button type="submit" class="btn btn-sm btn-danger">Cancelar Pago</button>
-                        </form>
-                    }
-                </td>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Actividades</th>
+                <th>Total a Pagar</th>
+                <th>Estado</th>
+                <th>Acción</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var socio in Model)
+            {
+                <tr>
+                    <td>@socio.Nombre</td>
+                    <td>@socio.Apellido</td>
+                    <td>@socio.Dni</td>
+                    <td>
+                        <ul>
+                            @foreach (var act in socio.Actividades)
+                            {
+                                <li><strong>@act.nombreActividad</strong> - @act.diasPorSemana día(s) - $@act.precio.ToString("N2")</li>
+                            }
+                        </ul>
+                    </td>
+                    <td><strong>$@socio.Total.ToString("N2")</strong></td>
+                    <td>
+                        @if (socio.YaPagado)
+                        {
+                            <span class="text-success">Pagado</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Pendiente</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!socio.YaPagado)
+                        {
+                            <form asp-action="RegistrarPago" method="post">
+                                <input type="hidden" name="socioId" value="@socio.SocioId" />
+                                <button type="submit" class="btn btn-sm btn-primary">Registrar Pago</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="CancelarPago" method="post">
+                                <input type="hidden" name="socioId" value="@socio.SocioId" />
+                                <button type="submit" class="btn btn-sm btn-danger">Cancelar Pago</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

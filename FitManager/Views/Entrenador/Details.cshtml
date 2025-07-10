@@ -1,53 +1,57 @@
 ﻿@model FitManager.Models.Entrenador
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Entrenador";
 }
 
-<h1>Details</h1>
+<h1 class="mb-4">Detalle del entrenador</h1>
 
-<div>
-    <h4>Entrenador</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.SueldoMensual.ToString("N2", new System.Globalization.CultureInfo("es-AR"))
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SueldoMensual)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SueldoMensual)
-        </dd>
-    </dl>
-    <h4>Actividades que dicta</h4>
-    <td>
+<div class="card bg-light mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Información personal</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombre)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Apellido)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Apellido)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Telefono)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Telefono)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SueldoMensual)</dt>
+            <dd class="col-sm-9">@Model.SueldoMensual.ToString("N2", new System.Globalization.CultureInfo("es-AR"))</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card bg-light mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Actividades que dicta</h5>
+    </div>
+    <div class="card-body">
         @if (Model.EntrenadorActividades != null && Model.EntrenadorActividades.Any())
         {
-            @string.Join(", ", Model.EntrenadorActividades.Select(ea => ea.Actividad?.Nombre ?? ""))
+            <ul class="mb-0">
+                @foreach (var ea in Model.EntrenadorActividades)
+                {
+                    <li>@ea.Actividad?.Nombre</li>
+                }
+            </ul>
         }
         else
         {
-            <span class="text-muted">Sin actividades</span>
+            <p class="text-muted">Este entrenador no está asignado a ninguna actividad.</p>
         }
-    </td>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Volver</a>
+
+<div class="d-flex gap-2">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
 </div>

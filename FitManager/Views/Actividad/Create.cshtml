@@ -4,69 +4,71 @@
     ViewData["Title"] = "Crear Actividad";
 }
 
-<h1>Crear nueva actividad</h1>
-
-<hr />
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Actividad.Nombre" class="control-label"></label>
-        <input asp-for="Actividad.Nombre" class="form-control" />
-        <span asp-validation-for="Actividad.Nombre" class="text-danger"></span>
+<div class="card-fit">
+    <div class="card-fit-header">
+        <h2>Crear nueva actividad</h2>
     </div>
 
-    <h4>Precios por cantidad de días semanales</h4>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Días por semana</th>
-                <th>Precio ($)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Precios.Count; i++)
-            {
+    <form asp-action="Create" method="post">
+        <div class="form-group mb-3">
+            <label asp-for="Actividad.Nombre" class="control-label fw-bold"></label>
+            <input asp-for="Actividad.Nombre" class="form-control" />
+            <span asp-validation-for="Actividad.Nombre" class="text-danger"></span>
+        </div>
+
+        <h4 class="mt-4">Precios por cantidad de días semanales</h4>
+        <table class="table table-bordered mt-2">
+            <thead class="table-light text-center">
                 <tr>
-                    <td>
-                        @Model.Precios[i].DiasPorSemana
-                        <input type="hidden" asp-for="Precios[@i].DiasPorSemana" />
-                    </td>
-                    <td>
-                        <input asp-for="Precios[@i].Precio" class="form-control" />
-                        <span asp-validation-for="Precios[@i].Precio" class="text-danger"></span>
-                    </td>
+                    <th>Días por semana</th>
+                    <th>Precio ($)</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Precios.Count; i++)
+                {
+                    <tr>
+                        <td class="text-center align-middle">
+                            @Model.Precios[i].DiasPorSemana
+                            <input type="hidden" asp-for="Precios[@i].DiasPorSemana" />
+                        </td>
+                        <td>
+                            <input asp-for="Precios[@i].Precio" class="form-control" />
+                            <span asp-validation-for="Precios[@i].Precio" class="text-danger"></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <h4>Entrenadores asignados (opcional)</h4>
-    <div class="form-group">
-        @if (Model.EntrenadoresDisponibles != null && Model.EntrenadoresDisponibles.Any())
-        {
-            @foreach (var entrenador in Model.EntrenadoresDisponibles)
+        <h4 class="mt-4">Entrenadores asignados (opcional)</h4>
+        <div class="form-group">
+            @if (Model.EntrenadoresDisponibles != null && Model.EntrenadoresDisponibles.Any())
             {
-                <div class="form-check">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="EntrenadorIdsSeleccionados"
-                           value="@entrenador.Id" />
-                    <label class="form-check-label">@entrenador.Nombre @entrenador.Apellido</label>
-                </div>
+                @foreach (var entrenador in Model.EntrenadoresDisponibles)
+                {
+                    <div class="form-check mb-2">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="EntrenadorIdsSeleccionados"
+                               value="@entrenador.Id" />
+                        <label class="form-check-label fw-semibold">@entrenador.Nombre @entrenador.Apellido</label>
+                    </div>
+                }
             }
-        }
-        else
-        {
-            <p class="text-muted">No hay entrenadores disponibles para asignar.</p>
-        }
-    </div>
+            else
+            {
+                <p class="text-muted">No hay entrenadores disponibles para asignar.</p>
+            }
+        </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Volver</a>
-</form>
+        <div class="form-actions mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

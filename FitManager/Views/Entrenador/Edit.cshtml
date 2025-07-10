@@ -1,74 +1,124 @@
 ﻿@model FitManager.ViewModels.CrearEntrenadorViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Entrenador";
 }
 
-<h1>Editar</h1>
+<style>
+    body {
+    background-color: #f0f8ff;
+    }
 
-<h4>Entrenador</h4>
+    .card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    height: 100%;
+    }
+
+    h1, h4 {
+    color: #004085;
+    }
+
+    label {
+    font-weight: 600;
+    }
+
+    .form-control, .form-select {
+    margin-bottom: 15px;
+    }
+
+    .form-actions {
+    margin-top: 20px;
+    }
+
+    .btn-primary {
+    background-color: #007bff;
+    border: none;
+    }
+
+    .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    }
+</style>
+
+<h1>Editar Entrenador</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <input type="hidden" asp-for="Entrenador.Id" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Entrenador.Nombre" class="control-label"></label>
-                <input asp-for="Entrenador.Nombre" class="form-control" />
-                <span asp-validation-for="Entrenador.Nombre" class="text-danger"></span>
-            </div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Entrenador.Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Entrenador.Apellido" class="control-label"></label>
-                <input asp-for="Entrenador.Apellido" class="form-control" />
-                <span asp-validation-for="Entrenador.Apellido" class="text-danger"></span>
-            </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="form-group">
+                    <label asp-for="Entrenador.Nombre"></label>
+                    <input asp-for="Entrenador.Nombre" class="form-control" />
+                    <span asp-validation-for="Entrenador.Nombre" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Entrenador.Email" class="control-label"></label>
-                <input asp-for="Entrenador.Email" class="form-control" />
-                <span asp-validation-for="Entrenador.Email" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Entrenador.Apellido"></label>
+                    <input asp-for="Entrenador.Apellido" class="form-control" />
+                    <span asp-validation-for="Entrenador.Apellido" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Entrenador.Telefono" class="control-label"></label>
-                <input asp-for="Entrenador.Telefono" class="form-control" />
-                <span asp-validation-for="Entrenador.Telefono" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Entrenador.Email"></label>
+                    <input asp-for="Entrenador.Email" class="form-control" />
+                    <span asp-validation-for="Entrenador.Email" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Entrenador.SueldoMensual" class="control-label"></label>
-                <input asp-for="Entrenador.SueldoMensual" class="form-control" type="number" step="0.01" lang="es" />
-                <span asp-validation-for="Entrenador.SueldoMensual" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Entrenador.Telefono"></label>
+                    <input asp-for="Entrenador.Telefono" class="form-control" />
+                    <span asp-validation-for="Entrenador.Telefono" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Entrenador.SueldoMensual"></label>
+                    <input asp-for="Entrenador.SueldoMensual" class="form-control" type="number" step="0.01" lang="es" />
+                    <span asp-validation-for="Entrenador.SueldoMensual" class="text-danger"></span>
+                </div>
             </div>
-            <h4>Actividades que dicta</h4>
-            <div class="form-group">
-                @foreach (var actividad in Model.ActividadDisponible)
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <h4 class="mb-3">Actividades que dicta</h4>
+                @if (Model.ActividadDisponible != null && Model.ActividadDisponible.Any())
                 {
-                    <div class="form-check">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               value="@actividad.Id"
-                               name="ActividadIdSeleccionadas"
-                        @(Model.ActividadIdSeleccionadas.Contains(actividad.Id) ? "checked" : "") />
-                        <label class="form-check-label">@actividad.Nombre</label>
-                    </div>
+                    @foreach (var actividad in Model.ActividadDisponible)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input"
+                            type="checkbox"
+                            value="@actividad.Id"
+                            name="ActividadIdSeleccionadas"
+                            @(Model.ActividadIdSeleccionadas.Contains(actividad.Id) ? "checked" : "") />
+                            <label class="form-check-label fw-bold">@actividad.Nombre</label>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No hay actividades disponibles.</p>
                 }
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Volver</a>
-</div>
+    <div class="form-actions mt-4">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

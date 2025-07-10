@@ -4,45 +4,49 @@
     ViewData["Title"] = "Listado de Actividades";
 }
 
-<h1>Actividades</h1>
+<div class="card-fit">
+    <div class="card-fit-header">
+        <h2 class="mb-0">Actividades</h2>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ Nueva Actividad</a>
-</p>
+    <p>
+        <a asp-action="Create" class="btn btn-primary btn-lg shadow-sm">
+            <i class="fas fa-plus"></i> Nueva Actividad
+        </a>
+    </p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Entrenadores</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-light text-center">
             <tr>
-                <td>@item.Nombre</td>
-                <td>
-                    @if (item.EntrenadorActividades != null && item.EntrenadorActividades.Any())
-                    {
-                        @string.Join(", ", item.EntrenadorActividades
-                                 .Where(ea => ea.Entrenador != null)
-                                 .Select(ea => $"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}"))
-                    }
-                    else
-                    {
-                        <span class="text-muted">Sin entrenadores asignados</span>
-                    }
-                </td>
-                <td class="text-nowrap">
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
-                        <i class="fas fa-eye"></i> Detalles
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
+                <th>Nombre</th>
+                <th>Entrenadores</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>
+                        @if (item.EntrenadorActividades != null && item.EntrenadorActividades.Any())
+                        {
+                            @string.Join(", ", item.EntrenadorActividades
+                                     .Where(ea => ea.Entrenador != null)
+                                     .Select(ea => $"{ea.Entrenador.Nombre} {ea.Entrenador.Apellido}"))
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin entrenadores asignados</span>
+                        }
+                    </td>
+                    <td class="text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalle</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
