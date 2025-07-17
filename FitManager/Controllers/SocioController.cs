@@ -87,7 +87,10 @@ namespace FitManager.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var actividades = _context.Actividades.ToList();
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var actividades = _context.Actividades
+                    .Where(a => a.UsuarioId == userId)
+                    .ToList();
                 model.Actividades = actividades.Select(a => new SocioActividadViewModel
                 {
                     ActividadId = a.Id,
@@ -147,7 +150,9 @@ namespace FitManager.Controllers
                 return NotFound();
             }
 
-            var todasLasActividades = await _context.Actividades.ToListAsync();
+            var todasLasActividades = await _context.Actividades
+                .Where(a => a.UsuarioId == userId)
+                .ToListAsync();
             var actividadesVM = todasLasActividades.Select(a => new SocioActividadViewModel
             {
                 ActividadId = a.Id,

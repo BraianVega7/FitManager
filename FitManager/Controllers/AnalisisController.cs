@@ -24,12 +24,19 @@ namespace FitManager.Controllers
             var activos = socios.Count(s => s.Activo);
             var inactivos = socios.Count(s => !s.Activo);
 
+            var totalSueldos = await _context.Entrenadores
+                .Where(e => e.UsuarioId == userId)
+                .SumAsync(e => e.SueldoMensual);
+
             var totalIngresos =await  _context.Pago
                 .Where(p => p.FechaPago.Month == DateTime.Now.Month && p.FechaPago.Year == DateTime.Now.Year && p.Socio.UsuarioId == userId)
                 .SumAsync(p => p.Monto);
-            var totalEgresos = await _context.Gastos
+            var totalGastos = await _context.Gastos
                 .Where(g => g.Fecha.Month == DateTime.Now.Month && g.Fecha.Year == DateTime.Now.Year && g.UsuarioId == userId)
                 .SumAsync(g => g.Monto);
+
+            var totalEgresos = totalSueldos + totalGastos;
+
             var viewModel = new CrearAnalisisViewModel
             {
                 CantidadActivos = activos,
